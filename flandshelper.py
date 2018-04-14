@@ -29,7 +29,6 @@ DEFAULT_MODEL = {
 }
 
 DEBUG=False
-#DEBUG=True
 
 def dprint(*args, **nargs):
     global DEBUG
@@ -265,20 +264,27 @@ class MainWindow(QMainWindow):
         self.saveCurrentBook()
 
     def on_actionLoad(self):
-        fname = Qt.QFileDialog.getOpenFileName(self, filter='JSON Files (*.json)')
-        #dprint("Load: ", fname[0])
-        try:
-            #TODO Verify valid model
-            self.loadModelFromFile(fname[0]) 
-        except (ValueError,KeyError):
-            dprint("MainWindow.on_actionLoad: Error loading model from file.")
+        f = Qt.QFileDialog.getOpenFileName(self, filter='JSON Files (*.json)')
+        fname = f[0]
+        if (fname != ''):
+            #dprint("Load: ", fname[0])
+            try:
+                #TODO Verify valid model
+                self.loadModelFromFile(fname) 
+                self.loadCurrentBook()
+            except (ValueError,KeyError):
+                dprint("MainWindow.on_actionLoad: Error loading model from file.")
 
     def on_actionSaveAs(self):
-        fname = Qt.QFileDialog.getSaveFileName(self, filter='JSON Files (*.json)')
-        #TODO Verify valid filename and path
-        dprint("SaveAs: ", fname[0])
-        #TODO Handle OS errors in saving file
-        self.saveModelToFile(fname[0])
+        f = Qt.QFileDialog.getSaveFileName(self, filter='JSON Files (*.json)')
+        fname = f[0]
+        if (not fname.endswith(".json")):
+            fname += ".json"
+        if (fname != ''):
+            #TODO Verify valid filename and path
+            dprint("SaveAs: ", fname)
+            #TODO Handle OS errors in saving file
+            self.saveModelToFile(fname)
 
     def on_actionReset(self):
         yesno = Qt.QMessageBox.question(self, "WARNING: Reset All", "Are you sure you want to clear ALL checkbox entries, including deleting all checkboxes?", 
