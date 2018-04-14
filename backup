@@ -1,0 +1,36 @@
+{
+    "book1": {
+        "10": {
+            "checked": false,
+            "label": "10",
+            "page": 10
+        },
+        "137": {
+            "checked": false,
+            "label": "137",
+            "page": 137
+        },
+        "15": {
+            "checked": false,
+            "label": "15",
+            "page": 15
+        }
+    },
+    "book10": {},
+    "book11": {},
+    "book12": {},
+    "book2": {},
+    "book3": {
+        "405": {
+            "checked": true,
+            "label": "405",
+            "page": 405
+        }
+    },
+    "book4": {},
+    "book5": {},
+    "book6": {},
+    "book7": {},
+    "book8": {},
+    "book9": {}
+}
