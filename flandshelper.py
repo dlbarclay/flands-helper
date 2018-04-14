@@ -215,7 +215,10 @@ class MainWindow(QMainWindow):
 
     def resetModel(self):
         self.model = DEFAULT_MODEL
-        self.saveModelToFile()
+
+    def resetAllCheckboxes(self):
+        self.resetModel()
+        self.loadCurrentBook()
 
     def insertCheckBox(self, number, checked=QtCore.Qt.Checked, label=None):
         if (label == None):
@@ -225,7 +228,7 @@ class MainWindow(QMainWindow):
         index = self.listModel.indexFromItem(item)
         return index
 
-    def on_addButtonReleased(self):
+    def addCheckboxFromInput(self):
         book = self.bookSelector.currentIndex() + 1
         text = self.pageInput.text()
         checked = self.addCheckBox.checkState()
@@ -238,6 +241,12 @@ class MainWindow(QMainWindow):
         # Insert a checkbox entry
         self.insertCheckBox(page, checked=checked)
         self.saveCurrentBook()
+
+    def on_addButtonReleased(self):
+        self.addCheckboxFromInput()
+
+    def on_pageInputReturnPressed(self):
+        self.addCheckboxFromInput()
 
     def on_delButtonReleased(self):
         index = self.listView.currentIndex()
@@ -259,13 +268,16 @@ class MainWindow(QMainWindow):
         fname = Qt.QFileDialog.getOpenFileName(self, filter='JSON Files (*.json)')
         #dprint("Load: ", fname[0])
         try:
-            self.loadModelFromFile(fname[0]) #TODO Verify valid model
+            #TODO Verify valid model
+            self.loadModelFromFile(fname[0]) 
         except (ValueError,KeyError):
             dprint("MainWindow.on_actionLoad: Error loading model from file.")
 
     def on_actionSaveAs(self):
         fname = Qt.QFileDialog.getSaveFileName(self, filter='JSON Files (*.json)')
-        #dprint("SaveAs: ", fname[0])
+        #TODO Verify valid filename and path
+        dprint("SaveAs: ", fname[0])
+        #TODO Handle OS errors in saving file
         self.saveModelToFile(fname[0])
 
     def on_actionReset(self):
@@ -281,7 +293,13 @@ class MainWindow(QMainWindow):
         self.listModel = CheckBoxListModel(self.listView)
         self.listView.setModel(self.listModel)
 
+        #TODO De-select listView when clicking outside of view
+        #TODO De-select listView when pressing ESC
+
+        #TODO Delete entry by pressing DELETE
         self.addButton.released.connect(self.on_addButtonReleased)
+        self.pageInput.returnPressed.connect(self.on_pageInputReturnPressed)
+        #TODO Add entry by pressing ENTER
         self.delButton.released.connect(self.on_delButtonReleased)
         self.bookSelector.currentIndexChanged.connect(self.on_bookSelectorChanged)
         self.listModel.itemChanged.connect(self.on_itemChanged)
