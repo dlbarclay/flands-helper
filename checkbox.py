@@ -88,7 +88,7 @@ class CheckBoxListModel(QStandardItemModel):
             elif (checkbox.equals(item)):
                 index = i# + 1
             else:
-                dprint(checkbox, " > ", item)
+                #dprint(checkbox, " > ", item)
                 break
         
         return index
@@ -104,9 +104,9 @@ class CheckBoxListModel(QStandardItemModel):
     def insertCheckBox(self, checkbox):
         index = self._insertIndex(checkbox)
         existing = self.itemFromIndex(self.index(index, 0))
-        dprint("Attempting insert at index:", index)
+        #dprint("Attempting insert at index:", index)
         if ((existing is None) or (not checkbox.equals(existing))):
-            dprint("Existing:", existing)
+            #dprint("Existing:", existing)
             self.insertCheckBoxAt(index, checkbox)
         else:
             dprint("Ex:", existing, "  New:",checkbox, "  Eq:",checkbox.equals(existing))
