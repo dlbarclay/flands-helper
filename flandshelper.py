@@ -162,8 +162,8 @@ class MainWindow(QMainWindow):
             self.resetAllCheckboxes()
 
     def initUI(self):
-        self.setWindowIcon(QIcon("tickbox64.png"))
-        uic.loadUi("mainwindow.ui", self)
+        self.setWindowIcon(QIcon("res/tickbox64.png"))
+        uic.loadUi("res/mainwindow.ui", self)
 
         self.listModel = CheckBoxListModel(self.listView)
         self.listView.setModel(self.listModel)
