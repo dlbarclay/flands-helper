@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+#TODO Add support for loading book QComboBox items from model
+#TODO Add support for adding new books
+#TODO Add support for deleting specific books
+
 import os
 import sys
 import json
@@ -162,7 +166,7 @@ class MainWindow(QMainWindow):
             self.resetAllCheckboxes()
 
     def initUI(self):
-        self.setWindowIcon(QIcon("res/tickbox64.png"))
+        self.setWindowIcon(QIcon("res/tickbox.ico"))
         uic.loadUi("res/mainwindow.ui", self)
 
         self.listModel = CheckBoxListModel(self.listView)
@@ -171,11 +175,10 @@ class MainWindow(QMainWindow):
         #TODO De-select listView when clicking outside of view
         #TODO De-select listView when pressing ESC
 
-        #TODO Delete entry by pressing DELETE
         self.addButton.released.connect(self.on_addButtonReleased)
         self.pageInput.returnPressed.connect(self.on_pageInputReturnPressed)
-        #TODO Add entry by pressing ENTER
         self.delButton.released.connect(self.on_delButtonReleased)
+        #TODO Delete entry by pressing DELETE
         self.bookSelector.currentIndexChanged.connect(self.on_bookSelectorChanged)
         self.listModel.itemChanged.connect(self.on_itemChanged)
 
