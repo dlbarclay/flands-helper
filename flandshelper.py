@@ -21,6 +21,17 @@ from debugprint import dprint, setDebugPrint
 from checkbox import CheckBox, CheckBoxListModel
 
 
+def resource_path(relative):
+#    if (os.path.basename(sys.argv[0]) == "flanshelper.py"):
+#        return relative
+#    else:
+    path = os.path.join(
+            os.environ.get("_MEIPASS2", os.path.abspath(".")), 
+            relative
+    )
+    print(path)
+    return path
+
 DEFAULT_MODEL = {
     "book1": {},
     "book2": {},
@@ -166,8 +177,8 @@ class MainWindow(QMainWindow):
             self.resetAllCheckboxes()
 
     def initUI(self):
-        self.setWindowIcon(QIcon("res/tickbox.ico"))
-        uic.loadUi("res/mainwindow.ui", self)
+        self.setWindowIcon(QIcon(resource_path("res/tickbox.ico")))
+        uic.loadUi(resource_path("res/mainwindow.ui"), self)
 
         self.listModel = CheckBoxListModel(self.listView)
         self.listView.setModel(self.listModel)
