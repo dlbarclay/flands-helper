@@ -22,13 +22,13 @@ from checkbox import CheckBox, CheckBoxListModel
 
 
 if (getattr(sys, "_MEIPASS", None) is None):
-    vprint("No resource path specified. Using current directory")
+    dprint("No resource path specified. Using current directory")
 
 
 def resource_path(relative):
     basepath = getattr(sys, "_MEIPASS", os.getcwd())
     path = os.path.join(basepath, relative)
-    vprint(path)
+    dprint(path)
     return path
 
 
