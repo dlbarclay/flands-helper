@@ -125,13 +125,7 @@ class MainWindow(QMainWindow):
         self.insertCheckBox(page, checked=checked)
         self.saveCurrentBook()
 
-    def on_addButtonReleased(self):
-        self.addCheckboxFromInput()
-
-    def on_pageInputReturnPressed(self):
-        self.addCheckboxFromInput()
-
-    def on_delButtonReleased(self):
+    def delSelectedCheckbox(self):
         index = self.listView.currentIndex()
 
         # No row selected
@@ -140,6 +134,21 @@ class MainWindow(QMainWindow):
 
         self.listModel.removeRow(index.row())
         self.saveCurrentBook()
+
+    def on_addButtonReleased(self):
+        self.addCheckboxFromInput()
+
+    def on_pageInputReturnPressed(self):
+        self.addCheckboxFromInput()
+
+    def on_listViewKeyPressed(self, ev):
+        print("QListView - Key Pressed:", ev.key())
+        if (ev.key() == QtCore.Qt.Key_Delete):
+            print("Delete Pressed")
+            self.delSelectedCheckbox()
+
+    def on_delButtonReleased(self):
+        self.delSelectedCheckbox()
 
     def on_bookSelectorChanged(self):
         self.loadCurrentBook()
@@ -191,7 +200,7 @@ class MainWindow(QMainWindow):
         self.addButton.released.connect(self.on_addButtonReleased)
         self.pageInput.returnPressed.connect(self.on_pageInputReturnPressed)
         self.delButton.released.connect(self.on_delButtonReleased)
-        #TODO Delete entry by pressing DELETE
+        self.listView.keyPressEvent = self.on_listViewKeyPressed
         self.bookSelector.currentIndexChanged.connect(self.on_bookSelectorChanged)
         self.listModel.itemChanged.connect(self.on_itemChanged)
 
