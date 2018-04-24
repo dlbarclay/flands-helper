@@ -14,7 +14,7 @@ from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import pyqtSignal, QObject, QFileSelector
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QComboBox, QLabel, \
-    QLineEdit, QListWidget, QListView, QMenuBar, QMenuBar, QToolBar, \
+    QLineEdit, QListView, QMenuBar, QMenuBar, QToolBar, \
     QApplication, QWidget, QMainWindow, QStatusBar
 
 from debugprint import dprint, setDebugPrint
@@ -135,6 +135,10 @@ class MainWindow(QMainWindow):
         self.listModel.removeRow(index.row())
         self.saveCurrentBook()
 
+    def deselectCheckbox(self):
+        self.listView.clearSelection()
+        self.listView.setCurrentIndex(self.listModel.index(-1,0))
+
     def on_addButtonReleased(self):
         self.addCheckboxFromInput()
 
@@ -142,10 +146,11 @@ class MainWindow(QMainWindow):
         self.addCheckboxFromInput()
 
     def on_listViewKeyPressed(self, ev):
-        print("QListView - Key Pressed:", ev.key())
+        #print("QListView - Key Pressed:", ev.key())
         if (ev.key() == QtCore.Qt.Key_Delete):
-            print("Delete Pressed")
             self.delSelectedCheckbox()
+        elif (ev.key() == QtCore.Qt.Key_Escape):
+            self.deselectCheckbox()
 
     def on_delButtonReleased(self):
         self.delSelectedCheckbox()
@@ -160,7 +165,7 @@ class MainWindow(QMainWindow):
         f = Qt.QFileDialog.getOpenFileName(self, filter='JSON Files (*.json)')
         fname = f[0]
         if (fname != ''):
-            #dprint("Load: ", fname[0])
+            dprint("Load: ", fname[0])
             try:
                 #TODO Verify valid model
                 self.loadModelFromFile(fname) 
