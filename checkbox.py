@@ -31,6 +31,8 @@ class CheckBox(QStandardItem):
             )
 
     def equals(self, other):
+        if (other is None):
+            return False
         return ((self.page == other.page) and (self.text() == other.text()))
         #    and (self.checkState() == other.checkState())
 
@@ -41,28 +43,42 @@ class CheckBox(QStandardItem):
         return not self.equals(other)
 
     def __gt__(self, other):
+        if (other is None):
+            return True
         if (self.page == other.page):
             return self.text() > other.text()
         else:
             return self.page > other.page
 
     def __ge__(self, other):
+        if (other is None):
+            return True
         if (self.page == other.page):
             return self.text() >= other.text()
         else:
             return self.page > other.page
 
     def __lt__(self, other):
+        if (other is None):
+            return False
         if (self.page == other.page):
             return self.text() < other.text()
         else:
             return self.page < other.page
 
     def __le__(self, other):
+        if (other is None):
+            return False
         if (self.page == other.page):
             return self.text() <= other.text()
         else:
             return self.page < other.page
+
+    def toggle(self):
+        self.setCheckState({
+                Qt.Unchecked:   Qt.Checked, 
+                Qt.Checked:     Qt.Unchecked
+            }[self.checkState()])
 
 
 
@@ -90,7 +106,6 @@ class CheckBoxListModel(QStandardItemModel):
             else:
                 #dprint(checkbox, " > ", item)
                 break
-        
         return index
 
     # Insert checkbox into listView at given integer index
@@ -111,6 +126,7 @@ class CheckBoxListModel(QStandardItemModel):
         else:
             dprint("Ex:", existing, "  New:",checkbox, "  Eq:",checkbox.equals(existing))
             dprint("Identical checkbox found. Rejecting insert")
+
     def loadModel(self, model, clearExisting=True):
         if clearExisting:
             self.clear()
