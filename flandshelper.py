@@ -125,6 +125,11 @@ class MainWindow(QMainWindow):
         self.insertCheckBox(page, checked=checked)
         self.saveCurrentBook()
 
+    def toggleSelectedCheckbox(self):
+        checkbox = self.listModel.itemFromIndex(self.listView.currentIndex())
+        if (checkbox != None):
+            checkbox.toggle()
+
     def delSelectedCheckbox(self):
         index = self.listView.currentIndex()
 
@@ -149,6 +154,8 @@ class MainWindow(QMainWindow):
         #print("QListView - Key Pressed:", ev.key())
         if (ev.key() == QtCore.Qt.Key_Delete):
             self.delSelectedCheckbox()
+        elif (ev.key() == QtCore.Qt.Key_Space):
+            self.toggleSelectedCheckbox()
         elif (ev.key() == QtCore.Qt.Key_Escape):
             self.deselectCheckbox()
 
@@ -200,7 +207,6 @@ class MainWindow(QMainWindow):
         self.listView.setModel(self.listModel)
 
         #TODO De-select listView when clicking outside of view
-        #TODO De-select listView when pressing ESC
 
         self.addButton.released.connect(self.on_addButtonReleased)
         self.pageInput.returnPressed.connect(self.on_pageInputReturnPressed)
