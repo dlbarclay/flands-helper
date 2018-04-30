@@ -7,15 +7,16 @@
 import os
 import sys
 import json
+import traceback
 from shutil import copyfile
 
 #from PyQt5.QtCore import Qt
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtCore import pyqtSignal, QObject, QFileSelector
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QComboBox, QLabel, \
-    QLineEdit, QListView, QMenuBar, QMenuBar, QToolBar, \
-    QApplication, QWidget, QMainWindow, QStatusBar
+from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, \
+    QLineEdit, QListView, QMenuBar, QMenuBar, QToolBar, QStatusBar, QLabel, \
+    QVBoxLayout, QHBoxLayout, QComboBox
 
 from debugprint import dprint, setDebugPrint
 from checkbox import CheckBox, CheckBoxListModel
@@ -188,8 +189,16 @@ class MainWindow(QMainWindow):
         if (fname != ''):
             #TODO Verify valid filename and path
             dprint("SaveAs: ", fname)
-            #TODO Handle OS errors in saving file
-            self.saveModelToFile(fname)
+            try:
+                #TODO Handle OS errors in saving file
+                self.saveModelToFile(fname)
+            except Exception as e:
+                exc_type, exc_value, exc_tb = sys.exc_info()
+                tbf = traceback.format_exception(exc_type, exc_value, exc_tb)
+                tbs = "".join(tbf)
+                print(tbs, end='')
+                errormessage = "Error: " + repr(e) + "\n\n" + tbs
+                QMessageBox.about(self, "Error", errormessage)
 
     def on_actionReset(self):
         yesno = Qt.QMessageBox.question(self, "WARNING: Reset All", "Are you sure you want to clear ALL checkbox entries, including deleting all checkboxes?", 
