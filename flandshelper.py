@@ -34,13 +34,13 @@ def resource_path(relative):
 
 
 DEFAULT_MODEL = {
-    "book1": {},
-    "book2": {},
-    "book3": {},
-    "book4": {},
-    "book5": {},
-    "book6": {},
-    "book7": {},
+    "Book 1": {},
+    "Book 2": {},
+    "Book 3": {},
+    "Book 4": {},
+    "Book 5": {},
+    "Book 6": {},
+    "Book 7": {},
 #    "book8": {},
 #    "book9": {},
 #    "book10": {},
@@ -67,15 +67,24 @@ class MainWindow(QMainWindow):
         
         self.loadCurrentBook()
 
+    def loadBooks(self):
+        self.bookSelector.clear()
+
+        books = sorted(self.model.keys())
+        for book in books:
+            self.bookSelector.addItem(book)
+
     def loadBook(self, book):
         self.listModel.loadModel(self.model[book])
 
     def loadCurrentBook(self):
-        book = "book{}".format(self.bookSelector.currentIndex() + 1)
+        #book = "book{}".format(self.bookSelector.currentIndex() + 1)
+        book = self.bookSelector.currentText()
         self.loadBook(book)
 
     def saveCurrentBook(self):
-        book = "book{}".format(self.bookSelector.currentIndex() + 1)
+        #book = "book{}".format(self.bookSelector.currentIndex() + 1)
+        book = self.bookSelector.currentText()
         self.model.update({book: self.listModel.getModel()})
 
     def loadModelFromFile(self, filename="model.json"):
@@ -93,6 +102,10 @@ class MainWindow(QMainWindow):
         f = open(filename, "w")
         json.dump(mw.model, f, indent=4, sort_keys=True)
         f.close()
+
+    def closeEvent(self, event):
+        self.saveModelToFile()
+        event.accept()
 
     def setModel(self, model):
         self.model = model
@@ -212,10 +225,14 @@ class MainWindow(QMainWindow):
         uic.loadUi(resource_path(
                 os.path.join("res","mainwindow.ui")), self)
 
+        self.loadBooks()
+
         self.listModel = CheckBoxListModel(self.listView)
         self.listView.setModel(self.listModel)
 
         #TODO De-select listView when clicking outside of view
+        #   Intercept all mouse events?
+        #   Assign default mouse event handler to all classes?
 
         self.addButton.released.connect(self.on_addButtonReleased)
         self.pageInput.returnPressed.connect(self.on_pageInputReturnPressed)
@@ -227,18 +244,6 @@ class MainWindow(QMainWindow):
         self.actionLoad.triggered.connect(self.on_actionLoad)
         self.actionSaveAs.triggered.connect(self.on_actionSaveAs)
         self.actionReset.triggered.connect(self.on_actionReset)
-
-        #help(QtCore.QModelIndex)
-        #help(self.listView)
-        #help(self.listModel)
-        #help(self.bookSelector)
-        #help(self.pageInput)
-
-        #self.show()
-
-    def closeEvent(self, event):
-        self.saveModelToFile()
-        event.accept()
 
 
 if (__name__ == "__main__"):
